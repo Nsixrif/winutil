@@ -10,7 +10,7 @@ Winutil must be run in Admin mode because it performs system-wide tweaks. To ach
 
 1. **Right-Click Method:**
    - Right-click on the start menu.
-   - Choose "PowerShell As Admin" (for Windows 10) or "Windows Terminal As Admin" (for Windows 11).
+   - Choose "Windows PowerShell (Admin)" (for Windows 10) or "Terminal (Admin)" (for Windows 11).
 
 2. **Search and Launch Method:**
    - Press the Windows key.
@@ -32,10 +32,9 @@ or by executing:
 iwr -useb https://christitus.com/win | iex
 ```
 
-if for some reason this site is not reachable from your country please try running it directly from github
-
+if for some reason this site is not reachable from your country please try running it directly from github (replace `RELEASE_TAG` with current release that you are interested in, for example `v2024.06.05`)
 ```
-irm https://raw.githubusercontent.com/ChrisTitusTech/winutil/main/winutil.ps1 | iex
+irm "https://github.com/ChrisTitusTech/winutil/releases/download/RELEASE_TAG/winutil.ps1" | iex
 ```
 
 #### Automation
@@ -128,7 +127,9 @@ If you encounter any challenges or problems with the script, I kindly request th
 
 ## Contribute Code
 
-To contribute new code, please ensure that it is submitted to the **TEST BRANCH**. Please note that merges will not be performed directly on the MAIN branch.
+Pull Requests are now handled directly on the MAIN branch. This was done since we can now select specific releases to launch via releases in GitHub. 
+
+If doing a code change and you can submit a PR to main branch, but I am very selective about these. Do not use a code formatter, massive amounts of line changes, and make multiple feature changes. EACH FEATURE CHANGE SHOULD BE IT'S OWN Pull Request!
 
 When creating pull requests, it is essential to thoroughly document all changes made. This includes documenting any additions made to the tweaks section and ensuring that corresponding undo measures are in place to remove the newly added tweaks if necessary. Failure to adhere to this format may result in denial of the pull request. Additionally, comprehensive documentation is required for all code changes. Any code lacking sufficient documentation may also be denied.
 

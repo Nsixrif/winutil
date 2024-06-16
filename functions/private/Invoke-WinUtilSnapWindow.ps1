@@ -1,22 +1,22 @@
-function Invoke-WinUtilNumLock {
+function Invoke-WinUtilSnapWindow {
     <#
     .SYNOPSIS
-        Disables/Enables NumLock on startup
+        Disables/Enables Snapping Windows on startup
     .PARAMETER Enabled
-        Indicates whether to enable or disable Numlock on startup
+        Indicates whether to enable or disable Snapping Windows on startup
     #>
     Param($Enabled)
     Try{
         if ($Enabled -eq $false){
-            Write-Host "Enabling Numlock on startup"
-            $value = 2
+            Write-Host "Enabling Snap Windows On startup | Relogin Required"
+            $value = 1
         }
         else {
-            Write-Host "Disabling Numlock on startup"
+            Write-Host "Disabling Snap Windows On startup | Relogin Required"
             $value = 0
         }
-        $Path = "HKU:\.Default\Control Panel\Keyboard"
-        Set-ItemProperty -Path $Path -Name InitialKeyboardIndicators -Value $value
+        $Path = "HKCU:\Control Panel\Desktop"
+        Set-ItemProperty -Path $Path -Name WindowArrangementActive -Value $value
     }
     Catch [System.Security.SecurityException] {
         Write-Warning "Unable to set $Path\$Name to $Value due to a Security Exception"
