@@ -12,19 +12,34 @@
         Height="Auto"
         MaxWidth="1380"
         MaxHeight="800"
-        Title="Chris Titus Tech's Windows Utility">
+        Title="WinUtil">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" CornerRadius="10"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
     <Style TargetType="ToolTip">
-        <Setter Property="Background" Value="{DynamicResource MainBackgroundColor}"/>
+        <Setter Property="Background" Value="{DynamicResource ToolTipBackgroundColor}"/>
         <Setter Property="Foreground" Value="{DynamicResource MainForegroundColor}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource ButtonBackgroundSelectedColor}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource BorderColor}"/>
+        <Setter Property="MaxWidth" Value="{DynamicResource ToolTipWidth}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="FontSize" Value="{DynamicResource FontSize}"/>
         <Setter Property="FontFamily" Value="{DynamicResource FontFamily}"/>
+        <!-- This ContentTemplate ensures that the content of the ToolTip wraps text properly for better readability -->
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <ContentPresenter Content="{TemplateBinding Content}">
+                        <ContentPresenter.Resources>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="TextWrapping" Value="Wrap"/>
+                            </Style>
+                        </ContentPresenter.Resources>
+                    </ContentPresenter>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type MenuItem}">
@@ -66,6 +81,41 @@
                 <Setter Property="Cursor" Value="Hand" />
             </Trigger>
         </Style.Triggers>
+    </Style>
+    <Style x:Key="AppEntryBorderStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="{DynamicResource AppEntryBorderThickness}"/>
+        <Setter Property="CornerRadius" Value="5"/>
+        <Setter Property="Padding" Value="{DynamicResource AppEntryMargin}"/>
+        <Setter Property="Width" Value="{DynamicResource AppEntryWidth}"/>
+        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="Margin" Value="{DynamicResource AppEntryMargin}"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Background" Value="{DynamicResource AppInstallUnselectedColor}"/>
+    </Style>
+    <Style x:Key="AppEntryCheckboxStyle" TargetType="CheckBox">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="{DynamicResource AppEntryMargin}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="CheckBox">
+                    <ContentPresenter Content="{TemplateBinding Content}"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    Margin="{TemplateBinding Padding}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="AppEntryNameStyle" TargetType="TextBlock">
+        <Setter Property="FontSize" Value="{DynamicResource AppEntryFontSize}"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Foreground" Value="{DynamicResource MainForegroundColor}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="{DynamicResource AppEntryMargin}"/>
+        <Setter Property="Background" Value="Transparent"/>
     </Style>
 
     <Style TargetType="Button" x:Key="HoverButtonStyle">
@@ -196,45 +246,6 @@
             <Setter Property="Foreground" Value="{DynamicResource LabelboxForegroundColor}"/>
             <Setter Property="Background" Value="{DynamicResource LabelBackgroundColor}"/>
             <Setter Property="FontFamily" Value="{DynamicResource FontFamily}"/>
-        </Style>
-        <!-- Category Toggle Button Style for the Apps Window-->
-        <Style x:Key="CategoryToggleButtonStyle" TargetType="ToggleButton">
-            <Setter Property="Foreground" Value="{DynamicResource LabelboxForegroundColor}"/>
-            <Setter Property="Background" Value="{DynamicResource MainBackgroundColor}"/>
-            <Setter Property="FontFamily" Value="{DynamicResource HeaderFontFamily}"/>
-            <Setter Property="FontSize" Value="{DynamicResource HeaderFontSize}"/>
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Left"/>
-            <Setter Property="Padding" Value="10,2,10,2"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ToggleButton">
-                        <Border Background="{TemplateBinding Background}"
-                                BorderBrush="{DynamicResource BorderColor}"
-                                BorderThickness="0"
-                                CornerRadius="{DynamicResource ButtonCornerRadius}">
-                            <StackPanel Orientation="Horizontal" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}" Margin="{TemplateBinding Padding}">
-                                <TextBlock x:Name="PrefixTextBlock"/>
-                                <ContentPresenter Content="{TemplateBinding Content}" />
-                            </StackPanel>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="PrefixTextBlock" Property="Text" Value="[-] "/>
-                            </Trigger>
-                            <Trigger Property="IsChecked" Value="False">
-                                <Setter TargetName="PrefixTextBlock" Property="Text" Value="[+] "/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="{DynamicResource ButtonBackgroundMouseoverColor}"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
 
         <!-- TextBlock template -->
@@ -502,19 +513,6 @@
                  </Setter.Value>
             </Setter>
         </Style>
-    <!-- Collapsed Checkbox Style -->
-    <Style x:Key="CollapsedCheckBoxStyle" TargetType="CheckBox">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="CheckBox">
-                    <ContentPresenter Content="{TemplateBinding Content}"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Left"
-                                    Margin="{TemplateBinding Padding}"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
         <Style TargetType="RadioButton">
             <Setter Property="Foreground" Value="{DynamicResource MainForegroundColor}"/>
             <Setter Property="Background" Value="{DynamicResource MainBackgroundColor}"/>
@@ -851,7 +849,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <DockPanel HorizontalAlignment="Stretch" Background="{DynamicResource MainBackgroundColor}" SnapsToDevicePixels="True" Grid.Row="0" Width="Auto">
+        <DockPanel Name="NavDockPanel" HorizontalAlignment="Stretch" Background="{DynamicResource MainBackgroundColor}" SnapsToDevicePixels="True" Grid.Row="0" Width="Auto">
             <StackPanel Name="NavLogoPanel" Orientation="Horizontal" HorizontalAlignment="Left" Background="{DynamicResource MainBackgroundColor}" SnapsToDevicePixels="True" Margin="10,0,20,0">
             </StackPanel>
             <ToggleButton Margin="0,0,5,0" HorizontalAlignment="Left" Height="{DynamicResource TabButtonHeight}" Width="{DynamicResource TabButtonWidth}"
@@ -894,7 +892,7 @@
                     </TextBlock>
                 </ToggleButton.Content>
             </ToggleButton>
-            <Grid Background="{DynamicResource MainBackgroundColor}" ShowGridLines="False" Width="Auto" Height="Auto" HorizontalAlignment="Stretch">
+            <Grid Name="GridBesideNavDockPanel" Background="{DynamicResource MainBackgroundColor}" ShowGridLines="False" Width="Auto" Height="Auto" HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/> <!-- Main content area -->
                     <ColumnDefinition Width="Auto"/><!-- Space for options button -->
