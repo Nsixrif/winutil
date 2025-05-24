@@ -376,12 +376,15 @@ if ($sync["ISOLanguage"].Items.Count -eq 1) {
 }
 $sync["ISOLanguage"].SelectedIndex = 0
 
-$sync["SearchBar"].Add_TextChanged({
-    if ($sync.SearchBar.Text -ne "") {
-        $sync.SearchBarClearButton.Visibility = "Visible"
-    } else {
-        $sync.SearchBarClearButton.Visibility = "Collapsed"
-    }
+# The SearchBarTimer is used to delay the search operation until the user has stopped typing for a short period
+# This prevents the ui from stuttering when the user types quickly as it dosnt need to update the ui for every keystroke
+
+$searchBarTimer = New-Object System.Windows.Threading.DispatcherTimer
+$searchBarTimer.Interval = [TimeSpan]::FromMilliseconds(300)
+$searchBarTimer.IsEnabled = $false
+
+$searchBarTimer.add_Tick({
+    $searchBarTimer.Stop()
     switch ($sync.currentTab) {
         "Install" {
             Find-AppsByNameOrDescription -SearchString $sync.SearchBar.Text
@@ -390,6 +393,17 @@ $sync["SearchBar"].Add_TextChanged({
             Find-TweaksByNameOrDescription -SearchString $sync.SearchBar.Text
         }
     }
+})
+$sync["SearchBar"].Add_TextChanged({
+    if ($sync.SearchBar.Text -ne "") {
+        $sync.SearchBarClearButton.Visibility = "Visible"
+    } else {
+        $sync.SearchBarClearButton.Visibility = "Collapsed"
+    }
+    if ($searchBarTimer.IsEnabled) {
+        $searchBarTimer.Stop()
+    }
+    $searchBarTimer.Start()
 })
 
 $sync["Form"].Add_Loaded({
@@ -465,7 +479,8 @@ $sync["AboutMenuItem"].Add_Click({
 
     $authorInfo = @"
 Author   : <a href="https://github.com/ChrisTitusTech">@christitustech</a>
-Runspace : <a href="https://github.com/DeveloperDurp">@DeveloperDurp</a>
+UI       : <a href="https://github.com/MyDrift-user">@MyDrift-user</a>, <a href="https://github.com/Marterich">@Marterich</a>
+Runspace : <a href="https://github.com/DeveloperDurp">@DeveloperDurp</a>, <a href="https://github.com/Marterich">@Marterich</a>
 MicroWin : <a href="https://github.com/KonTy">@KonTy</a>, <a href="https://github.com/CodingWonders">@CodingWonders</a>
 GitHub   : <a href="https://github.com/ChrisTitusTech/winutil">ChrisTitusTech/winutil</a>
 Version  : <a href="https://github.com/ChrisTitusTech/winutil/releases/tag/$($sync.version)">$($sync.version)</a>
