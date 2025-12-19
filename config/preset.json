@@ -1,15 +1,12 @@
 {
   "Standard": [
-    "WPFTweaksAH",
+    "WPFTweaksActivity",
     "WPFTweaksConsumerFeatures",
     "WPFTweaksDisableExplorerAutoDiscovery",
     "WPFTweaksDVR",
-    "WPFTweaksHome",
-    "WPFTweaksLoc",
+    "WPFTweaksLocation",
     "WPFTweaksServices",
-    "WPFTweaksStorage",
     "WPFTweaksTele",
-    "WPFTweaksWifi",
     "WPFTweaksDiskCleanup",
     "WPFTweaksDeleteTempFiles",
     "WPFTweaksEndTaskOnTaskbar",
@@ -19,7 +16,6 @@
   "Minimal": [
     "WPFTweaksConsumerFeatures",
     "WPFTweaksDisableExplorerAutoDiscovery",
-    "WPFTweaksHome",
     "WPFTweaksServices",
     "WPFTweaksTele"
   ]
