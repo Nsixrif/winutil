@@ -1,12 +1,14 @@
-# Enable Legacy F8 Boot Recovery
+---
+title: "Enable Legacy F8 Boot Recovery"
+description: ""
+---
 
-```json
-"WPFFeatureEnableLegacyRecovery": {
+```json {filename="config/feature.json",linenos=inline,linenostart=99}
+  "WPFFeatureEnableLegacyRecovery": {
     "Content": "Enable Legacy F8 Boot Recovery",
     "Description": "Enables Advanced Boot Options screen that lets you start Windows in advanced troubleshooting modes.",
     "category": "Features",
     "panel": "1",
-    "Order": "a018_",
     "feature": [],
     "InvokeScript": [
       "bcdedit /set bootmenupolicy legacy"

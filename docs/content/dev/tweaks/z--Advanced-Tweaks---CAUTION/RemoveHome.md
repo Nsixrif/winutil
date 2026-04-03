@@ -1,12 +1,14 @@
-# Remove Home from explorer
+---
+title: "Remove Home from Explorer"
+description: ""
+---
 
-```json
-"WPFTweaksRemoveHome": {
+```json {filename="config/tweaks.json",linenos=inline,linenostart=1518}
+  "WPFTweaksRemoveHome": {
     "Content": "Remove Home from Explorer",
-    "Description": "Removes the Home from Explorer and sets This PC as default",
+    "Description": "Removes the Home from Explorer and sets This PC as default.",
     "category": "z__Advanced Tweaks - CAUTION",
     "panel": "1",
-    "Order": "a029_",
     "InvokeScript": [
       "
       Remove-Item \"HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Desktop\\NameSpace\\{f874310e-b6b7-47dc-bc84-b9e6b38f5903}\"
@@ -20,8 +22,3 @@
       "
     ],
 ```
-
-## Registry Changes
-Applications and System Components store and retrieve configuration data to modify windows settings, so we can use the registry to change many settings in one place.
-
-You can find information about the registry on [Wikipedia](https://www.wikiwand.com/en/Windows_Registry) and [Microsoft's Website](https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry).

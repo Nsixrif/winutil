@@ -1,12 +1,14 @@
-# Remove ALL MS Store Apps - NOT RECOMMENDED
+---
+title: "Remove all Microsoft Store apps"
+description: ""
+---
 
-```json
-"WPFTweaksDeBloat": {
-    "Content": "Remove ALL MS Store Apps - NOT RECOMMENDED",
-    "Description": "USE WITH CAUTION!!! This will remove ALL Microsoft store apps other than the essentials ones.",
+```json {filename="config/tweaks.json",linenos=inline,linenostart=1676}
+  "WPFTweaksDeBloat": {
+    "Content": "Remove all Microsoft Store apps",
+    "Description": "This will remove a bunch of Windows pre-installed applications which most people dont want on there system.",
     "category": "z__Advanced Tweaks - CAUTION",
     "panel": "1",
-    "Order": "a028_",
     "appx": [
       "Microsoft.Microsoft3DViewer",
       "Microsoft.AppConnector",
@@ -18,8 +20,10 @@
       "Microsoft.BingFoodAndDrink",
       "Microsoft.BingHealthAndFitness",
       "Microsoft.BingTravel",
-      "Microsoft.MinecraftUWP",
-      "Microsoft.GamingServices",
+      "Clipchamp.Clipchamp",
+      "Microsoft.Todos",
+      "MicrosoftCorporationII.QuickAssist",
+      "Microsoft.MicrosoftStickyNotes",
       "Microsoft.GetHelp",
       "Microsoft.GetStarted",
       "Microsoft.Messaging",

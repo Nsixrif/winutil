@@ -14,7 +14,7 @@ Welcome to the official documentation for Winutil, your go-to utility for optimi
 
 ## Running the latest release of Winutil
 
-* You will first need to start a Powershell terminal **as Admin**.
+* You will first need to start a PowerShell terminal **as Admin**.
 * Now you can run the following command:
 
 ```
@@ -22,5 +22,5 @@ irm "https://christitus.com/win" | iex
 ```
 
 
-> [!NOTE]
+> [!IMPORTANT]
 > Winutil is updated frequently as of the time of writing. Consequently, features and functionalities may evolve, and the documentation may not always reflect the most current images or information.

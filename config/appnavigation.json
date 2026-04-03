@@ -21,13 +21,13 @@
         "Description": "Upgrade all applications to the latest version"
     },
     "WingetRadioButton": {
-        "Content": "Winget",
+        "Content": "WinGet",
         "Category": "__Package Manager",
         "Type": "RadioButton",
         "GroupName": "PackageManagerGroup",
         "Checked": true,
         "Order": "1",
-        "Description": "Use Winget for package management"
+        "Description": "Use WinGet for package management"
     },
     "ChocoRadioButton": {
         "Content": "Chocolatey",
@@ -60,7 +60,7 @@
         "Description": "Clear the selection of applications"
     },
     "WPFGetInstalled": {
-        "Content": "Get Installed",
+        "Content": "Show Installed Apps",
         "Category": "__Selection",
         "Type": "Button",
         "Order": "4",
@@ -72,5 +72,13 @@
         "Type": "Button",
         "Order": "5",
         "Description": "Show the selected applications"
+    },
+    "WPFToggleFOSSHighlight": {
+        "Content": "Highlight FOSS",
+        "Category": "__Selection",
+        "Type": "Toggle",
+        "Checked": true,
+        "Order": "6",
+        "Description": "Toggle the green highlight for FOSS applications"
     }
 }

@@ -128,6 +128,154 @@ winutil/
 - CheckBoxes for options
 - ListBoxes for selections
 
+## Win11 Creator Architecture
+
+The **Win11 Creator** is a specialized subsystem within Winutil that creates customized Windows 11 ISOs. It operates independently from the main package installation and tweak system.
+
+### Win11 Creator Components
+
+**Core Functions** (`functions/private/`):
+- `Invoke-WinUtilISO.ps1`: Main orchestrator containing all Win11 Creator functions
+  - `Invoke-WinUtilISOBrowse`: ISO file selection dialog
+  - `Invoke-WinUtilISOMountAndVerify`: Validates and mounts ISO, verifies it's official Windows 11
+  - `Invoke-WinUtilISOModify`: Launches modification in background runspace
+  - `Invoke-WinUtilISOExport`: Handles ISO and USB export
+  - `Invoke-WinUtilISOCheckExistingWork`: Recovers incomplete work sessions
+  - `Invoke-WinUtilISOCleanAndReset`: Cleans up temp directories and resets UI
+
+- `Invoke-WinUtilISOScript.ps1`: Applies modifications to mounted install.wim
+  - Removes provisioned AppX packages (40+ bloatware apps)
+  - Injects drivers (optional) from the current system
+  - Removes OneDrive setup files
+  - Applies offline registry tweaks (hardware bypass, privacy, telemetry, OOBE)
+  - Deletes telemetry scheduled task definitions
+  - Pre-stages setup scripts from autounattend.xml
+  - Removes unused Windows editions
+  - Cleans component store via DISM
+
+### Win11 Creator Data Flow
+
+```
+User selects official Windows 11 ISO
+    ↓
+Invoke-WinUtilISOBrowse → OpenFileDialog, validates file size
+    ↓
+Invoke-WinUtilISOMountAndVerify
+    ├─ Mount ISO via Mount-DiskImage
+    ├─ Verify install.wim or install.esd exists
+    ├─ Check for "Windows 11" in image metadata
+    ├─ Extract available editions (Home, Pro, Enterprise, etc.)
+    └─ Store ISO path, drive letter, WIM path, image info in $sync
+    ↓
+User optionally enables the Driver Injection checkbox
+    ↓
+Invoke-WinUtilISOModify (runs in background runspace)
+    ├─ Create work directory: ~WinUtil_Win11ISO_[timestamp]
+    ├─ Copy ISO contents to disk (~5-6 GB)
+    ├─ Mount install.wim at selected edition/index
+    ├─ Invoke-WinUtilISOScript:
+    │   ├─ Remove 40+ bloat AppX packages
+    │   ├─ Export and inject drivers (if enabled)
+    │   ├─ Remove OneDrive setup
+    │   ├─ Load offline registry hives
+    │   ├─ Apply 50+ registry tweaks (hardware bypass, privacy, telemetry, OOBE, etc.)
+    │   ├─ Delete telemetry scheduled task files
+    │   ├─ Pre-stage setup scripts from autounattend.xml to C:\Windows\Setup\Scripts\
+    │   └─ Unload registry hives
+    ├─ DISM /Cleanup-Image /StartComponentCleanup /ResetBase (saves 300-800 MB)
+    ├─ Dismount and save the modified install.wim (~10+ minutes, slowest step)
+    ├─ Export selected edition only (removes all other editions, saves 1-2 GB each)
+    ├─ Dismount source ISO
+    └─ Report completion, enable export options
+    ↓
+Invoke-WinUtilISOExport (user chooses output)
+    ├─ Option 1: Save as ISO
+    │   ├─ Build bootable ISO via oscdimg.exe (BIOS/UEFI dual-boot)
+    │   └─ Output: Win11_Modified_[date].iso (2.5-3.5 GB)
+    │
+    └─ Option 2: Write to USB
+        ├─ Format USB as GPT
+        ├─ Create 512 MB EFI partition
+        ├─ Copy modified ISO contents
+        └─ Output: Bootable USB (minimum 8 GB)
+    ↓
+Invoke-WinUtilISOCleanAndReset (optional)
+    └─ Delete temp working directory (~10-15 GB)
+    └─ Reset UI to initial state
+```
+
+### Win11 Creator Validation & Safety
+
+**ISO Validation**:
+- Only accepts official Microsoft Windows 11 ISOs
+- Validates presence of install.wim or install.esd
+- Checks image metadata for "Windows 11" string
+- Rejects custom, modified, or non-Windows 11 ISOs
+
+**Work Session Recovery**:
+- Auto-detects incomplete work from previous sessions
+- Allows resuming Step 4 (export) without re-running Steps 1-3
+- Prevents redundant modifications
+
+**Modification Safety**:
+- All registry changes are documented in a script (reversible)
+- Original ISO never modified; only working copy
+- Logged to `WinUtil_Win11ISO.log` for debugging
+- DISM handles image dismount with automatic cleanup on error
+
+### Win11 Creator Registry Tweaks
+
+The `Invoke-WinUtilISOScript` function applies **50+ offline registry tweaks**:
+
+**Hardware Bypass**:
+- TPM 2.0 check bypass
+- Secure Boot requirement bypass
+- CPU compatibility bypass
+- RAM requirement bypass
+- Storage check bypass
+
+**Privacy & Telemetry**:
+- Disable advertising ID
+- Disable tailored experiences
+- Disable input personalization
+- Disable speech online privacy
+- Disable cloud content suggestions
+- Disable app suggestion subscriptions
+- Remove CEIP, Appraiser, WaaSMedic, etc.
+
+**OOBE & Setup**:
+- Enable local account setup
+- Skip Microsoft account requirement
+- Dark mode by default
+- Empty taskbar and Start Menu
+
+**Post-Setup Installations**:
+- Prevent DevHome auto-installation
+- Prevent new Outlook Mail app installation
+- Prevent Teams auto-installation
+
+**System Features**:
+- Disable BitLocker and device encryption
+- Disable Chat icon from the Taskbar
+- Disable OneDrive folder backup
+- Disable Copilot
+- Disable Windows Update during OOBE (re-enabled at first login)
+
+### Driver Injection Feature
+
+**Optional Enhancement**: When enabled, exports all drivers from the running system and injects them into both:
+- `install.wim` (main OS image)
+- `boot.wim` index 2 (Windows Setup PE environment)
+
+**Use Case**: Enables offline installation on systems with missing drivers.
+
+### Disk Space Requirements
+
+- **Temporary working directory**: ~10-15 GB
+- **Original ISO**: 4-6 GB
+- **Modified ISO**: 2.5-3.5 GB
+- **Total needed**: ~25 GB for safe operation
+
 ## Data Flow
 
 ### Application Installation Flow
@@ -139,7 +287,7 @@ Get-WinUtilCheckBoxes → Retrieves selected apps
     ↓
 For each selected app:
     ↓
-Check if WinGet/Choco installed
+Check if WinGet/Choco is installed
     ↓
 Install-WinUtilWinget/Choco (if needed)
     ↓
@@ -185,7 +333,7 @@ Retrieve "OriginalState" from tweak definition
     ↓
 Invoke-WPFUndoTweak → Restore original values
     ↓
-Remove from applied tweaks log
+Remove from the applied tweaks log
     ↓
 Update UI
 ```
@@ -194,7 +342,7 @@ Update UI
 
 ### applications.json Structure
 
-```json
+```json {filename="config/applications.json"}
 {
   "WPFInstall<AppName>": {
     "category": "Browsers",
@@ -217,14 +365,13 @@ Update UI
 
 ### tweaks.json Structure
 
-```json
+```json {filename="config/tweaks.json"}
 {
   "WPFTweaksTelemetry": {
     "Content": "Disable Telemetry",
     "Description": "Disables Microsoft Telemetry",
     "category": "Essential Tweaks",
     "panel": "1",
-    "Order": "a003_",
     "registry": [
       {
         "Path": "HKLM:\\SOFTWARE\\Policies\\Microsoft\\Windows\\DataCollection",
@@ -365,7 +512,7 @@ $sync.form.Dispatcher.Invoke([action]{
 ### Adding a New Application
 
 1. Edit `config/applications.json`:
-```json
+```json {filename="config/applications.json"}
 {
   "WPFInstallNewApp": {
     "category": "Utilities",
@@ -378,12 +525,12 @@ $sync.form.Dispatcher.Invoke([action]{
 ```
 
 2. Recompile: `.\Compile.ps1`
-3. The app appears automatically in Install tab
+3. The app appears automatically in the Install tab
 
 ### Adding a New Tweak
 
 1. Edit `config/tweaks.json`:
-```json
+```json {filename="config/tweaks.json"}
 {
   "WPFTweaksNewTweak": {
     "Content": "New Tweak",
@@ -403,7 +550,7 @@ $sync.form.Dispatcher.Invoke([action]{
 ```
 
 2. Recompile: `.\Compile.ps1`
-3. Tweak appears in Tweaks tab
+3. Tweak appears in the Tweaks tab
 
 ### Adding a New Function
 
@@ -464,7 +611,7 @@ Outputs `winutil.ps1` in the root directory.
 **Required**:
 - PowerShell 5.1+
 - .NET Framework 4.5+
-- Windows 10 1809+
+- Windows 11
 
 **Optional (auto-installed)**:
 - WinGet (Windows Package Manager)
@@ -515,6 +662,7 @@ Outputs `winutil.ps1` in the root directory.
 
 - [Contributing Guide](../../contributing/) - How to contribute code
 - [User Guide](../../userguide/) - End-user documentation
+- [Win11 Creator Guide](../../userguide/win11Creator/) - Building customized Windows 11 ISOs
 - [FAQ](../../faq/) - Common questions
 
 ## Additional Resources

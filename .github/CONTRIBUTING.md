@@ -21,7 +21,7 @@
 
 * Pull requests are now handled directly on the **MAIN branch**. This was done since we can now select specific releases to launch via releases in GitHub.
 
-* If you're doing code changes, then you can submit a PR to `main` branch, but I am very selective about these.
+* If you're doing code changes, then you can submit a PR to the `main` branch, but I am very selective about these.
 
 !!! warning "Important"
 
@@ -68,9 +68,9 @@ graph TD
 ### Fork the Repo
 * Fork the WinUtil Repository [here](https://github.com/ChrisTitusTech/winutil) to create a copy that will be available in your repository list.
 
-![Fork Image](assets/Fork-Button-Dark.png#only-dark#gh-dark-mode-only)
+![Fork Image](/docs/assets/images/Fork-Button-Dark.png#gh-dark-mode-only)
 
-![Fork Image](assets/Fork-Button-Light.png#only-light#gh-light-mode-only)
+![Fork Image](/docs/assets/images/Fork-Button-Light.png#only-light#gh-light-mode-only)
 
 ### Clone the Fork
 !!! tip
@@ -87,31 +87,31 @@ graph TD
 
 ### Testing your changes
 
-* To test to see if your changes work as intended run following commands in a powershell terminal as admin:
+* To test to see if your changes work as intended, run the following commands in a PowerShell terminal as admin:
 
 * Change the directory where you are running the commands to the forked project.
 * `cd {path to the folder with the compile.ps1}`
 * Run the following command to compile and run WinUtil:
 * `.\Compile.ps1 -run`
 
-![Compile](assets/Compile.png)
+![Compile](/docs/assets/images/Complie.png)
 
 * After seeing that your changes work properly, feel free to commit the changes to the repository and make a PR. For help on that, follow the documentation below.
 
 ### Committing the changes
 * Before committing your changes, please discard changes made to the `winutil.ps1` file, like the following:
 
-![Push Commit Image](assets/Discard-GHD.png)
+![Push Commit Image](/docs/assets/images/Discard-GHD.png)
 
 * Now, commit your changes once you are happy with the result.
 
-![Commit Image](assets/Commit-GHD.png)
+![Commit Image](/docs/assets/images/Commit-GHD.png)
 
 * Push the changes to upload them to your fork on github.com.
 
-![Push Commit Image](assets/Push-Commit.png)
+![Push Commit Image](/docs/assets/images/Push-Commit.png)
 
 ### Making a PR
-* To make a PR on your repo under a new branch linking to the main branch, a button will show and say Preview and Create pull request. Click that button and fill in all the information that is provided on the template. Once all the information is filled in correctly, check your PR to make sure there is not a WinUtil.ps1 file attached to the PR. Once everything is good, make the PR and wait for Chris (the maintainer) to accept or deny your PR. Once it is accepted by Chris, you will be able to see your changes in the "/windev" build.
+* To make a PR on your repo under a new branch linking to the main branch, a button will show and say Preview and Create pull request. Click that button and fill in all the information that is provided on the template. Once all the information is filled in correctly, check your PR to make sure there is no WinUtil.ps1 file attached to the PR. Once everything is good, make the PR and wait for Chris (the maintainer) to accept or deny your PR. Once it is accepted by Chris, you will be able to see your changes in the "/windev" build.
 * If you do not see your feature in the main "/win" build, that is fine. All new changes go into the /windev build to make sure everything is working OK before going fully public.
 * Congratulations! You just submitted your first PR. Thank you so much for contributing to WinUtil.

@@ -1,6 +1,7 @@
 ---
 title: Developer Reference
 weight: 3
+toc: false
 ---
 
 > [!NOTE]
@@ -41,3 +42,11 @@ weight: 3
 ### Features
 
 {{< autolinks section="dev/features/features" >}}
+
+### Remote Access
+
+{{< autolinks section="dev/features/remote-access" >}}
+
+### Powershell Profile Powershell 7+ Only
+
+{{< autolinks section="dev/features/powershell-profile-powershell-7--only" >}}

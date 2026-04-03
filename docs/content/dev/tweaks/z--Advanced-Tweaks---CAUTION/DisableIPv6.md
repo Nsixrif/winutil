@@ -1,19 +1,21 @@
-# Disable IPv6
+---
+title: "Disable IPv6"
+description: ""
+---
 
-```json
-"WPFTweaksDisableIPv6": {
+```json {filename="config/tweaks.json",linenos=inline,linenostart=2118}
+  "WPFTweaksDisableIPv6": {
     "Content": "Disable IPv6",
     "Description": "Disables IPv6.",
     "category": "z__Advanced Tweaks - CAUTION",
     "panel": "1",
-    "Order": "a024_",
     "registry": [
       {
         "Path": "HKLM:\\SYSTEM\\CurrentControlSet\\Services\\Tcpip6\\Parameters",
         "Name": "DisabledComponents",
         "Value": "255",
-        "OriginalValue": "0",
-        "Type": "DWord"
+        "Type": "DWord",
+        "OriginalValue": "0"
       }
     ],
     "InvokeScript": [
@@ -25,6 +27,7 @@
 ```
 
 ## Registry Changes
-Applications and System Components store and retrieve configuration data to modify windows settings, so we can use the registry to change many settings in one place.
+
+Applications and System Components store and retrieve configuration data to modify Windows settings, so we can use the registry to change many settings in one place.
 
 You can find information about the registry on [Wikipedia](https://www.wikiwand.com/en/Windows_Registry) and [Microsoft's Website](https://learn.microsoft.com/en-us/windows/win32/sysinfo/registry).

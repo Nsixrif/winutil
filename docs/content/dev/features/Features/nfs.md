@@ -1,12 +1,14 @@
-# NFS - Network File System
+---
+title: "NFS - Network File System"
+description: ""
+---
 
-```json
-"WPFFeaturenfs": {
+```json {filename="config/feature.json",linenos=inline,linenostart=63}
+  "WPFFeaturenfs": {
     "Content": "NFS - Network File System",
     "Description": "Network File System (NFS) is a mechanism for storing files on a network.",
     "category": "Features",
     "panel": "1",
-    "Order": "a014_",
     "feature": [
       "ServicesForNFS-ClientOnly",
       "ClientForNFS-Infrastructure",
